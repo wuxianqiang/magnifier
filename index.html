@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>放大镜</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .photo {
+            position: relative;
+            width: 430px;
+            height: 430px;
+            border: 2px solid #000;
+        }
+
+        .photo-iphone {
+            width: 100%;
+            height: 100%;
+        }
+
+        .move {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 215px;
+            height: 215px;
+            background: #000;
+            opacity: 0.3;
+            filter: alpha(opacity=30);
+            cursor: move;
+        }
+
+        .photo-left {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 434px;
+            width: 430px;
+            height: 430px;
+            overflow: hidden;
+        }
+
+        .photo-left-iphone {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="photo" id="photo">
+        <div class="move" id="move"></div>
+        <img class="photo-iphone" src="./iPhone.jpg" alt="iphone">
+    </div>
+    <div class="photo-left" id="photoLeft">
+        <img id="leftIphone" class="photo-left-iphone" src="./iPhone.jpg" alt="iphone">
+    </div>
+
+    <script>
+        var move = document.getElementById('move');
+        var photo = document.getElementById('photo');
+        var photoLeft = document.getElementById('photoLeft');
+        var leftIphone = document.getElementById('leftIphone');
+        photo.onmouseenter = function (e) {
+            e = e || window.event;
+            setPosition(e)
+            move.style.display = "block";
+            photoLeft.style.display = "block";
+        }
+        photo.onmousemove = function (e) {
+            e = e || window.event;
+            setPosition(e)
+        }
+        photo.onmouseleave = function () {
+            move.style.display = "none";
+            photoLeft.style.display = "none";
+        }
+
+        function setPosition(e) {
+            var tempLeft = 0;
+            var tempTop = 0;
+            var minLeft = 0;
+            var minTop = 0;
+            var maxLeft = photo.offsetWidth - move.offsetWidth;
+            var maxTop = photo.offsetHeight - move.offsetHeight;
+            var top = e.clientY - photo.offsetTop - (move.offsetHeight / 2);
+            var left = e.clientX - photo.offsetLeft - (move.offsetWidth / 2);
+            if (top < minTop) {
+                move.style.top = minTop + "px";
+                tempTop = minTop
+            } else if (top > maxTop) {
+                move.style.top = maxTop + "px";
+                tempTop = maxTop;
+            } else {
+                move.style.top = top + "px";
+                tempTop = top;
+            }
+            if (left < minLeft) {
+                move.style.left = minLeft + "px";
+                tempLeft = minLeft
+            } else if (left > maxLeft) {
+                move.style.left = maxLeft + "px";
+                tempLeft = maxLeft;
+            } else {
+                move.style.left = left + "px";
+                tempLeft = left;
+            }
+            leftIphone.style.top = -tempTop * 2 + "px";
+            leftIphone.style.left = -tempLeft * 2 + "px";
+        }
+    </script>
+</body>
+
+</html>
